@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="dashboard-toolbar">
+  <button class="btn" onclick="refreshResults()" id="refresh-btn">&#8635; REFRESH RESULTS</button>
+  <span id="refresh-status"></span>
+  <span class="last-updated">LAST UPDATED: {{ last_updated_display }}</span>
+</div>
+
+<div class="dashboard-grid">
+
+  {# ── LEFT: Player standings ── #}
+  <div class="players-panel">
+    <h2 class="section-title">STANDINGS</h2>
+
+    {% for player in draw.players %}
+    <div class="player-card" style="border-color: {{ player.color }}40">
+      <div class="player-name" style="color: {{ player.color }}">
+        &#9658; {{ player.name }}
+        <span class="team-count">({{ player.remaining_count }}/{{ player.teams|length }} LEFT)</span>
+      </div>
+      <ul class="team-list">
+        {% for team in player.teams | sort %}
+        <li class="team-item {% if team in eliminated %}eliminated{% endif %}" style="{% if team not in eliminated %}color: {{ player.color }}{% endif %}">
+          {{ team }}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+
+  {# ── RIGHT: Tournament ── #}
+  <div class="tournament-panel">
+    <h2 class="section-title">TOURNAMENT</h2>
+
+    {% if not draw.tournament_state.group_standings and not draw.tournament_state.knockout_matches %}
+    <div class="no-results-hint">
+      <span class="blink">_</span><br><br>
+      NO RESULTS YET.<br>
+      TOURNAMENT BEGINS {{ tournament_start }}.<br><br>
+      CLICK REFRESH TO CHECK FOR UPDATES.
+    </div>
+    {% endif %}
+
+    {# Group stage #}
+    {% if draw.tournament_state.group_standings %}
+    <div class="groups-section">
+      <h3 class="sub-title">GROUP STAGE</h3>
+      {% for group_name, rows in draw.tournament_state.group_standings.items() | sort %}
+      <details class="group-detail">
+        <summary class="group-summary">GROUP {{ group_name }}</summary>
+        <table class="standings-table">
+          <thead>
+            <tr>
+              <th>TEAM</th>
+              <th>P</th>
+              <th>W</th>
+              <th>D</th>
+              <th>L</th>
+              <th>GD</th>
+              <th class="pts">PTS</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in rows %}
+            <tr class="{% if row.team in eliminated %}group-elim{% endif %}">
+              <td>
+                {%- if row.team in player_team_map -%}
+                <span style="color: {{ player_team_map[row.team] }}">{{ row.team }}</span>
+                {%- else -%}
+                {{ row.team }}
+                {%- endif -%}
+              </td>
+              <td>{{ row.played }}</td>
+              <td>{{ row.won }}</td>
+              <td>{{ row.draw }}</td>
+              <td>{{ row.lost }}</td>
+              <td>{{ row.gd }}</td>
+              <td class="pts">{{ row.points }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </details>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {# Knockout stage #}
+    {% if knockout_by_round %}
+    <div class="knockout-section">
+      <h3 class="sub-title">KNOCKOUT STAGE</h3>
+      {% for round_key in round_order %}
+        {% if round_key in knockout_by_round %}
+        <div class="knockout-round-title">{{ round_display[round_key] }}</div>
+        {% for match in knockout_by_round[round_key] %}
+        <div class="knockout-match">
+          <span class="knockout-team home {% if match.winner == match.home %}winner{% else %}loser{% endif %}">
+            {{ match.home }}
+          </span>
+          <span class="knockout-score">{{ match.home_score }} - {{ match.away_score }}</span>
+          <span class="knockout-team {% if match.winner == match.away %}winner{% else %}loser{% endif %}">
+            {{ match.away }}
+          </span>
+        </div>
+        {% endfor %}
+        {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
+
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+{% endblock %}

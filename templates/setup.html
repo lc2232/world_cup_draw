@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">PLAYER SETUP</h2>
+<p class="hint">ENTER THE NAMES OF ALL PLAYERS IN THE DRAW.<br>MINIMUM 2 PLAYERS REQUIRED.</p>
+
+{% if error %}
+<p class="error-msg">{{ error }}</p>
+{% endif %}
+
+<form method="POST" action="{{ url_for('setup') }}" class="setup-form">
+  <div id="player-list">
+    <div class="player-row form-group">
+      <input type="text" name="player_name" placeholder="PLAYER 1" maxlength="20" required autocomplete="off">
+    </div>
+    <div class="player-row form-group">
+      <input type="text" name="player_name" placeholder="PLAYER 2" maxlength="20" required autocomplete="off">
+    </div>
+  </div>
+
+  <div class="setup-actions">
+    <button type="button" class="btn btn-secondary" onclick="addPlayer()">+ ADD PLAYER</button>
+    <button type="submit" class="btn">CONTINUE &gt;</button>
+  </div>
+</form>
+
+<script>
+  let count = 2;
+  function addPlayer() {
+    count++;
+    const list = document.getElementById('player-list');
+    const div = document.createElement('div');
+    div.className = 'player-row form-group';
+    div.innerHTML = `<input type="text" name="player_name" placeholder="PLAYER ${count}" maxlength="20" autocomplete="off">`;
+    list.appendChild(div);
+    div.querySelector('input').focus();
+  }
+</script>
+{% endblock %}

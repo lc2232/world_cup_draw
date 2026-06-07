@@ -1,0 +1,567 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #000;
+  color: #00ff41;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  line-height: 1.8;
+  min-height: 100vh;
+}
+
+/* Scanlines */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.08) 0px,
+    rgba(0, 0, 0, 0.08) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+/* ─── Header ─────────────────────────────────────────── */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #00ff41;
+  padding-bottom: 16px;
+  margin-bottom: 28px;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.site-title {
+  font-size: 14px;
+  text-shadow: 0 0 12px #00ff41, 0 0 24px #00ff41;
+  letter-spacing: 2px;
+}
+
+nav {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ─── Buttons ─────────────────────────────────────────── */
+.btn {
+  background: #000;
+  color: #00ff41;
+  border: 2px solid #00ff41;
+  padding: 10px 14px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  transition: background 0.05s, color 0.05s;
+  white-space: nowrap;
+}
+
+.btn:hover, .btn:focus {
+  background: #00ff41;
+  color: #000;
+  outline: none;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-danger {
+  border-color: #ff2244;
+  color: #ff2244;
+}
+
+.btn-danger:hover {
+  background: #ff2244;
+  color: #000;
+}
+
+.btn-secondary {
+  border-color: #008f11;
+  color: #008f11;
+}
+
+.btn-secondary:hover {
+  background: #008f11;
+  color: #000;
+}
+
+/* ─── Pixel box ───────────────────────────────────────── */
+.pixel-box {
+  border: 2px solid #00ff41;
+  padding: 20px;
+  box-shadow: 0 0 8px rgba(0, 255, 65, 0.2), inset 0 0 4px rgba(0, 255, 65, 0.05);
+}
+
+.pixel-box-dim {
+  border: 2px solid #008f11;
+  padding: 20px;
+}
+
+/* ─── Typography ──────────────────────────────────────── */
+h2.section-title {
+  font-size: 12px;
+  color: #00ff41;
+  text-shadow: 0 0 8px #00ff41;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+h3.sub-title {
+  font-size: 9px;
+  color: #008f11;
+  margin-bottom: 12px;
+  margin-top: 20px;
+}
+
+.hint {
+  font-size: 8px;
+  color: #008f11;
+  margin-bottom: 16px;
+  line-height: 2;
+}
+
+.error-msg {
+  color: #ff2244;
+  font-size: 8px;
+  margin-bottom: 16px;
+  padding: 10px;
+  border: 1px solid #ff2244;
+}
+
+/* ─── Forms ───────────────────────────────────────────── */
+.form-group {
+  margin-bottom: 14px;
+}
+
+input[type="text"] {
+  background: #000;
+  color: #00ff41;
+  border: 1px solid #00ff41;
+  padding: 10px 12px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 10px;
+  width: 100%;
+  outline: none;
+}
+
+input[type="text"]:focus {
+  border-color: #00ff41;
+  box-shadow: 0 0 6px rgba(0, 255, 65, 0.4);
+}
+
+input[type="text"]::placeholder {
+  color: #004400;
+}
+
+select {
+  background: #000;
+  color: #00ff41;
+  border: 1px solid #008f11;
+  padding: 6px 8px;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 8px;
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+}
+
+select:focus {
+  border-color: #00ff41;
+}
+
+select option {
+  background: #000;
+  color: #00ff41;
+}
+
+/* ─── Setup page ──────────────────────────────────────── */
+.setup-form {
+  max-width: 480px;
+}
+
+.player-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.player-row input {
+  flex: 1;
+}
+
+.setup-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+}
+
+/* ─── Draw page ───────────────────────────────────────── */
+.draw-options {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 16px;
+}
+
+@media (max-width: 800px) {
+  .draw-options {
+    grid-template-columns: 1fr;
+  }
+}
+
+.draw-option-box {
+  border: 2px solid #008f11;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.draw-option-box h3 {
+  font-size: 10px;
+  color: #00ff41;
+  margin-bottom: 4px;
+}
+
+.draw-option-box p {
+  font-size: 8px;
+  color: #008f11;
+  line-height: 2;
+}
+
+.draw-results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+/* Manual draw table */
+.manual-search {
+  margin-bottom: 12px;
+}
+
+.team-assign-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8px;
+}
+
+.team-assign-table th {
+  text-align: left;
+  padding: 8px;
+  border-bottom: 1px solid #008f11;
+  color: #008f11;
+  font-size: 7px;
+}
+
+.team-assign-table td {
+  padding: 6px 8px;
+  border-bottom: 1px solid #002200;
+}
+
+.team-assign-table tr:hover td {
+  background: #001100;
+}
+
+.team-assign-table .team-name-cell {
+  color: #00cc33;
+  white-space: nowrap;
+}
+
+.confed-badge {
+  font-size: 6px;
+  color: #005500;
+  display: block;
+}
+
+/* ─── Dashboard ───────────────────────────────────────── */
+.dashboard-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.last-updated {
+  font-size: 7px;
+  color: #005500;
+  flex: 1;
+  text-align: right;
+}
+
+#refresh-status {
+  font-size: 8px;
+  color: #00cc33;
+  min-width: 180px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Player cards */
+.player-card {
+  border: 1px solid #004400;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+
+.player-name {
+  font-size: 11px;
+  margin-bottom: 10px;
+  text-shadow: 0 0 6px currentColor;
+}
+
+.team-count {
+  font-size: 7px;
+  color: #006600;
+  margin-left: 6px;
+}
+
+.team-list {
+  list-style: none;
+  padding-left: 8px;
+}
+
+.team-item {
+  font-size: 8px;
+  color: #00cc33;
+  padding: 2px 0;
+  line-height: 2;
+}
+
+.team-item::before {
+  content: '> ';
+  color: #005500;
+}
+
+.team-item.eliminated {
+  text-decoration: line-through;
+  color: #004400;
+  opacity: 0.5;
+}
+
+/* Tournament panel */
+.tournament-panel {
+  overflow: auto;
+}
+
+/* Group tables */
+.groups-section {
+  margin-bottom: 24px;
+}
+
+details.group-detail {
+  margin-bottom: 8px;
+  border: 1px solid #004400;
+}
+
+summary.group-summary {
+  padding: 8px 12px;
+  cursor: pointer;
+  font-size: 9px;
+  color: #00ff41;
+  background: #001100;
+  list-style: none;
+  user-select: none;
+}
+
+summary.group-summary:hover {
+  background: #002200;
+}
+
+summary.group-summary::marker,
+summary.group-summary::-webkit-details-marker {
+  display: none;
+}
+
+summary.group-summary::before {
+  content: '▶ ';
+  font-size: 8px;
+}
+
+details[open] summary.group-summary::before {
+  content: '▼ ';
+}
+
+.standings-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 7px;
+  padding: 8px;
+}
+
+.standings-table th {
+  text-align: center;
+  padding: 6px 4px;
+  color: #006600;
+  border-bottom: 1px solid #003300;
+}
+
+.standings-table th:first-child {
+  text-align: left;
+  padding-left: 12px;
+}
+
+.standings-table td {
+  text-align: center;
+  padding: 5px 4px;
+  border-bottom: 1px solid #001a00;
+  color: #00cc33;
+}
+
+.standings-table td:first-child {
+  text-align: left;
+  padding-left: 12px;
+  color: #00ff41;
+}
+
+.standings-table tr.group-elim td {
+  color: #004400;
+  text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.standings-table .pts {
+  color: #00ff41;
+  font-size: 9px;
+}
+
+/* Knockout */
+.knockout-section {
+  margin-top: 8px;
+}
+
+.knockout-round-title {
+  font-size: 9px;
+  color: #008f11;
+  margin: 16px 0 8px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid #004400;
+}
+
+.knockout-match {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 8px;
+  align-items: center;
+  padding: 6px 8px;
+  border: 1px solid #002200;
+  margin-bottom: 4px;
+  font-size: 8px;
+}
+
+.knockout-team {
+  color: #00cc33;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.knockout-team.winner {
+  color: #00ff41;
+  text-shadow: 0 0 6px #00ff41;
+}
+
+.knockout-team.loser {
+  color: #004400;
+  text-decoration: line-through;
+}
+
+.knockout-team.home {
+  text-align: right;
+}
+
+.knockout-score {
+  color: #00ff41;
+  font-size: 10px;
+  text-align: center;
+  white-space: nowrap;
+  min-width: 40px;
+}
+
+.no-results-hint {
+  padding: 24px;
+  text-align: center;
+  color: #005500;
+  font-size: 8px;
+  line-height: 2.5;
+}
+
+/* ─── Reset page ──────────────────────────────────────── */
+.reset-warning {
+  border: 2px solid #ff2244;
+  padding: 20px;
+  max-width: 480px;
+  margin-bottom: 20px;
+}
+
+.reset-warning h2 {
+  color: #ff2244;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+
+.reset-warning p {
+  font-size: 8px;
+  color: #cc1133;
+  line-height: 2;
+  margin-bottom: 16px;
+}
+
+.reset-actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* ─── Animations ──────────────────────────────────────── */
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes glow-pulse {
+  0%, 100% { text-shadow: 0 0 8px #00ff41; }
+  50% { text-shadow: 0 0 20px #00ff41, 0 0 40px #00ff41; }
+}
+
+.glow {
+  animation: glow-pulse 2s ease-in-out infinite;
+}

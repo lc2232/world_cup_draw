@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="section-title">TEAM DRAW</h2>
+
+{% if draw.players[0].teams %}
+  {# ── Assignments already made ── #}
+  <p class="hint">DRAW COMPLETE &mdash; {{ total_teams }} TEAMS ASSIGNED TO {{ draw.players|length }} PLAYERS.</p>
+
+  <div class="draw-results-grid">
+    {% for player in draw.players %}
+    <div class="player-card" style="border-color: {{ player_colors[loop.index0 % player_colors|length] }}">
+      <div class="player-name" style="color: {{ player_colors[loop.index0 % player_colors|length] }}">
+        &#9658; {{ player.name }}
+        <span class="team-count">({{ player.teams|length }} teams)</span>
+      </div>
+      <ul class="team-list">
+        {% for team in player.teams %}
+        <li class="team-item" style="color: {{ player_colors[loop.index0 % player_colors|length] }}">{{ team }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endfor %}
+  </div>
+
+  <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:8px;">
+    <a href="{{ url_for('dashboard') }}" class="btn">VIEW DASHBOARD &gt;</a>
+    <form method="POST" action="{{ url_for('draw_random') }}" style="display:inline">
+      <button type="submit" class="btn btn-secondary">REDRAW (RANDOM)</button>
+    </form>
+    <button class="btn btn-secondary" onclick="document.getElementById('manual-panel').style.display='block'; this.style.display='none'">EDIT MANUALLY</button>
+  </div>
+
+{% else %}
+  {# ── No assignments yet ── #}
+  <p class="hint">
+    {{ total_teams }} TEAMS &mdash; {{ draw.players|length }} PLAYERS<br>
+    EACH PLAYER GETS ~{{ base_per_player }}{% if extra_players > 0 %}-{{ base_per_player + 1 }}{% endif %} TEAMS.
+  </p>
+
+  <div class="draw-options">
+    <div class="draw-option-box">
+      <h3>&#127922; RANDOM DRAW</h3>
+      <p>TEAMS WILL BE RANDOMLY SHUFFLED AND DISTRIBUTED EVENLY BETWEEN ALL PLAYERS.</p>
+      <form method="POST" action="{{ url_for('draw_random') }}">
+        <button type="submit" class="btn">RANDOM DRAW</button>
+      </form>
+    </div>
+
+    <div class="draw-option-box">
+      <h3>&#9998; MANUAL ENTRY</h3>
+      <p>ASSIGN EACH TEAM TO A PLAYER YOURSELF USING THE TABLE BELOW.</p>
+      <button class="btn" onclick="document.getElementById('manual-panel').style.display='block'; this.closest('.draw-options').style.display='none'">MANUAL ENTRY</button>
+    </div>
+  </div>
+{% endif %}
+
+{# ── Manual assignment panel (hidden by default) ── #}
+<div id="manual-panel" style="display:none; margin-top:24px;">
+  <h3 class="sub-title">MANUAL TEAM ASSIGNMENT</h3>
+
+  <div class="manual-search form-group">
+    <input type="text" id="team-search" placeholder="SEARCH TEAMS..." oninput="filterTeams(this.value)" autocomplete="off">
+  </div>
+
+  <form method="POST" action="{{ url_for('draw_manual') }}">
+    <div style="max-height:480px; overflow-y:auto; border:1px solid #004400;">
+      <table class="team-assign-table">
+        <thead>
+          <tr>
+            <th>TEAM</th>
+            <th>CONFEDERATION</th>
+            <th>ASSIGN TO</th>
+          </tr>
+        </thead>
+        <tbody id="team-table-body">
+          {% for team in teams %}
+          <tr class="team-row" data-name="{{ team.name | lower }}">
+            <td class="team-name-cell">
+              <input type="hidden" name="team_name" value="{{ team.name }}">
+              {{ team.name }}
+            </td>
+            <td>
+              <span class="confed-badge">{{ team.confederation }}</span>
+            </td>
+            <td>
+              <select name="team_player">
+                <option value="">-- NONE --</option>
+                {% for player in draw.players %}
+                <option value="{{ player.name }}">{{ player.name }}</option>
+                {% endfor %}
+              </select>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:16px; display:flex; gap:12px; align-items:center;">
+      <button type="submit" class="btn">SAVE ASSIGNMENTS</button>
+      <button type="button" class="btn btn-secondary" onclick="autoFill()">AUTO-FILL UNASSIGNED</button>
+    </div>
+  </form>
+</div>
+
+<script>
+  function filterTeams(query) {
+    const q = query.toLowerCase();
+    document.querySelectorAll('.team-row').forEach(row => {
+      row.style.display = row.dataset.name.includes(q) ? '' : 'none';
+    });
+  }
+
+  function autoFill() {
+    const players = {{ draw.players | map(attribute='name') | list | tojson }};
+    const rows = document.querySelectorAll('.team-row');
+    let idx = 0;
+    rows.forEach(row => {
+      const select = row.querySelector('select');
+      if (!select.value) {
+        select.value = players[idx % players.length];
+        idx++;
+      }
+    });
+  }
+</script>
+{% endblock %}

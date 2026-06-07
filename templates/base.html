@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WC 2026 DRAW</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <span class="site-title glow">&#9917; WC 2026 DRAW</span>
+      {% if has_draw %}
+      <nav>
+        <a href="{{ url_for('dashboard') }}" class="btn">DASHBOARD</a>
+        <a href="{{ url_for('draw_page') }}" class="btn btn-secondary">DRAW</a>
+        <a href="{{ url_for('reset') }}" class="btn btn-danger">RESET</a>
+      </nav>
+      {% endif %}
+    </header>
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

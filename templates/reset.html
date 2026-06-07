@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="reset-warning">
+  <h2>!! WARNING !!</h2>
+  <p>THIS WILL DELETE THE CURRENT DRAW AND ALL TOURNAMENT DATA. THIS ACTION CANNOT BE UNDONE.</p>
+  <div class="reset-actions">
+    <form method="POST" action="{{ url_for('reset') }}">
+      <button type="submit" class="btn btn-danger">CONFIRM RESET</button>
+    </form>
+    <a href="{{ url_for('dashboard') }}" class="btn">CANCEL</a>
+  </div>
+</div>
+{% endblock %}
