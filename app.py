@@ -20,7 +20,7 @@ WC_SEASON = '2026'
 REFRESH_COOLDOWN = timedelta(minutes=5)
 TOURNAMENT_START = 'JUN 11 2026'
 
-PLAYER_COLORS = ['#00ff41', '#00ccff', '#ffff00', '#ff6600', '#ff0066', '#cc00ff', '#00ff99', '#ff9900']
+PLAYER_COLORS = ['#c04010', '#3a6215', '#8040c0', '#1060a0', '#a06000', '#b03060', '#107050', '#804010']
 
 ROUND_ORDER = ['LAST_32', 'LAST_16', 'QUARTER_FINALS', 'SEMI_FINALS', 'FINAL', '3RD_PLACE']
 ROUND_DISPLAY = {
