@@ -113,13 +113,3 @@ world_cup_draw/
 
 ---
 
-## Themes
-
-Two visual themes are available on separate branches:
-
-| Branch | Style |
-|--------|-------|
-| `main` | Black background, matrix-green text — retro terminal / 8-bit aesthetic |
-| `flappy-bird-theme` | Sky-blue background, green pipe borders, bird-yellow accents — Flappy Bird style |
-
-Switch between them with `git checkout <branch>` and restart the server.
